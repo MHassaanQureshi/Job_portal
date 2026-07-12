@@ -93,7 +93,7 @@ export const GetJobById = async (req, res) => {
 
     const job = await Job.findById(jobid)
       .populate({ path: "company" })
-      .populate({ path: "created_by" }); // <-- match your actual schema field name
+      .populate({ path: "created_by" }); 
 
     if (!job) {
       return res.status(404).json({
@@ -167,7 +167,7 @@ export const updateJob = async (req, res) => {
       },
       {
         returnDocument: "after",
-        runValidators: true, // runs schema validations
+        runValidators: true, 
       },
     );
 
