@@ -125,7 +125,11 @@ export const GetAppByUserID = async(req,res) =>{
             })
 
         }
-        const application = await Application.findOne({applicant:UserID})
+        const application = await Application.findOne({applicant:UserID}).populate({
+        path: "company",
+      })
+      .sort({ createdAt: -1 })
+     
 
         if(!application){
             return res.status(400).json({
@@ -146,3 +150,24 @@ export const GetAppByUserID = async(req,res) =>{
         })
     }
 }
+export const GetApplicationsByJob = async (req, res) => {
+    try {
+        const { jobId } = req.params;
+
+        const applications = await Application.find({ job: jobId })
+            .populate("applicant")
+            .sort({ createdAt: -1 });
+
+        return res.status(200).json({
+            success: true,
+            totalApplicants: applications.length,
+            applications
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
